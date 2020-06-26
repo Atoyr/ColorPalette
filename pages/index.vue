@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <div class="color-circle">
-      <ColorCircle :saturation="saturation" :val="val"></ColorCircle>
+      <ColorCircle></ColorCircle>
     </div>
     <div class="slider-wrapper">
       <p class="slider-text">S</p>
@@ -14,8 +14,8 @@
       <p class="slider-text">V</p>
       <input 
          class="slider"
-         type="range" value="1" min="0" max="1" step="0.01" v-model="val"></input>
-      <p class="slider-text">{{vval}}</p>
+         type="range" value="1" min="0" max="1" step="0.01" v-model="valueBrightness"></input>
+      <p class="slider-text">{{vvalueBrightness}}</p>
     </div>
   </div>
 </template>
@@ -27,17 +27,43 @@ export default {
     ColorCircle
   },
   computed: {
+    size: function() {
+      return this.mag * basesize;
+    },
+    saturation: {
+      get() {
+        return this.$store.state.saturation;
+      },
+      set(value) {
+        this.$store.commit('updateSaturation', value);
+      }
+    },
+    valueBrightness: {
+      get() {
+        return this.$store.state.valueBrightness;
+      },
+      set(value) {
+        this.$store.commit('updateValueBrightness', value);
+      }
+    },
+    baseColor: {
+      get() {
+        return this.$store.state.baseColor;
+      },
+      set(value) {
+        this.$store.commit('updateBaseColor', value);
+        this.draw();
+      }
+    },
     vsaturation: function(){
       return parseInt(this.saturation * 100)
     },
-    vval: function(){
-      return parseInt(this.val * 100)
+    vvalueBrightness : function(){
+      return parseInt(this.valueBrightness * 100)
     }
   },
   data() {
     return{
-      saturation: 0.8,
-      val: 0.8
     }
   }
 }

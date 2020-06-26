@@ -1,5 +1,5 @@
 <template>
-  <canvas width="400" height="400" ref="canv" class="canv" @click="cl"></canvas>
+  <canvas width="400" height="400" ref="canv" class="canv" @click="onClick"></canvas>
 </template>
 
 <script>
@@ -22,26 +22,34 @@ export default {
       type: Number,
       default: 12
     },
-    saturation: {
-      type: Number,
-      default: 0.8
-    },
-    val: {
-      type: Number,
-      default: 0.8
-    },
   },
   computed: {
     size: function() {
       return this.mag * basesize;
     },
-  },
-  watch: {
-    saturation:  function(n,o){
-      this.draw()
+    saturation: {
+      get() {
+        return this.$store.state.saturation;
+      },
+      set(value) {
+        this.$store.commit('updateSaturation', value);
+      }
     },
-    val:  function(n,o){
-      this.draw()
+    valueBrightness: {
+      get() {
+        return this.$store.state.valueBrightness;
+      },
+      set(value) {
+        this.$store.commit('updateValueBrightness', value);
+      }
+    },
+    baseColor: {
+      get() {
+        return this.$store.state.baseColor;
+      },
+      set(value) {
+        this.$store.commit('updateBaseColor', value);
+      }
     }
   },
   data() {
@@ -63,11 +71,11 @@ export default {
       for (let i = 0 ; i < this.division; i++) {
         let h = 360 / this.division * i
 
-        let rgb = this.$hsv2rgb([h,this.saturation,this.val])
-        let rgb1 = this.$hsv2rgb([h + (360 / this.division / 4 * 1),this.saturation,this.val])
-        let rgb2 = this.$hsv2rgb([h + (360 / this.division / 4 * 2),this.saturation,this.val])
-        let rgb3 = this.$hsv2rgb([h + (360 / this.division / 4 * 3),this.saturation,this.val])
-        let rgb4 = this.$hsv2rgb([h + (360 / this.division),this.saturation,this.val])
+        let rgb = this.$hsv2rgb([h,this.saturation,this.valueBrightness])
+        let rgb1 = this.$hsv2rgb([h + (360 / this.division / 4 * 1), this.saturation, this.valueBrightness])
+        let rgb2 = this.$hsv2rgb([h + (360 / this.division / 4 * 2), this.saturation, this.valueBrightness])
+        let rgb3 = this.$hsv2rgb([h + (360 / this.division / 4 * 3), this.saturation, this.valueBrightness])
+        let rgb4 = this.$hsv2rgb([h + (360 / this.division), this.saturation, this.valueBrightness])
 
         let outringStr = divangle * i * Math.PI
         let outringEnd = divangle * (i + 1) * Math.PI
@@ -127,10 +135,51 @@ export default {
         this.ctx.fill();
       }
     },
-      cl: function() {
-        this.saturation = 0.5
-      }
+    drawBaseColorCircle: function(rad){
+      let outringRad = this.halfsize;
+      let inringRad = this.halfsize - this.lineWidth;
+      let donutringRad = this.halfsize - this.lineWidth * 2;
+      this.ctx.beginPath();
+      this.ctx.strokeStyle = 'rgb(255,255,255)'
+      this.ctx.lineWidth = 4
+      this.ctx.arc(
+        this.halfsize - Math.sin(rad) * (outringRad - this.lineWidth / 2 - this.borderWidth)
+        ,this.halfsize - Math.cos(rad) * (outringRad - this.lineWidth / 2 - this.borderWidth)
+        ,(this.lineWidth - 8 )/2
+        ,0
+        ,2 * Math.PI)
+      this.ctx.stroke()
+    },
+    onClick: function(e) {
+      let outringRad = this.halfsize;
+      let inringRad = this.halfsize - this.lineWidth;
+      let donutringRad = this.halfsize - this.lineWidth * 2;
 
+      let rect = e.target.getBoundingClientRect();
+      let x = e.clientX - rect.left - this.halfsize;
+      let y = e.clientY - rect.top - this.halfsize;
+      let z = x * x + y * y
+
+      let outRad2 = outringRad * outringRad
+      let inRad2 = inringRad * inringRad
+      let donutRad2 = donutringRad * donutringRad
+
+      console.log(x,y)
+      console.log(Math.atan2(x,y) * 180 / Math.PI)
+      if (z < outRad2 && inRad2 <= z) {
+        let rad = Math.atan2(x,y) + Math.PI;
+        if (rad < 0 ) {
+          rad = rad + Math.PI;
+        }
+        this.draw()
+        this.drawBaseColorCircle(rad);
+      } else if (z < inRad2 && donutRad2 <= z) {
+        let rad = Math.atan2(x,y) + Math.PI / 2; 
+
+        this.draw()
+        this.drawBaseColorCircle(rad)
+      }
+    }
   },
   mounted() {
     this.ctx = this.$refs.canv.getContext('2d')
