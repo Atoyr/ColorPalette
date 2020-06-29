@@ -21,8 +21,11 @@
       <p>HSV : {{selectColor[0]}} {{selectColor[1]}} {{selectColor[2]}}</p>
       <p>RGB : {{selectRGBColor[0]}} {{selectRGBColor[1]}} {{selectRGBColor[2]}}</p>
     </div>
-    <div>
-      <colorBox  :borderColor="selectRGBColor"></colorBox>
+    <div class="color-div">
+      <colorBox v-for="n of 8" :color="selectRGBColor" :borderColor="[32 * (n - 1),32 * (n - 1),32 * (n - 1)]"></colorBox>
+    </div>
+    <div class="color-div">
+      <colorBox v-for="n of 8" :borderColor="selectRGBColor" :color="[32 * (n - 1),32 * (n - 1),32 * (n - 1)]"></colorBox>
     </div>
   </div>
 </template>
@@ -102,5 +105,10 @@ export default {
 }
 .slider-text {
   width: 32px;
+}
+.color-div {
+  display: flex;
+  flex-direction: row; 
+  align-items: center;
 }
 </style>

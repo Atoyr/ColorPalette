@@ -201,9 +201,11 @@ export default {
       if (z < outRad2 && inRad2 <= z) {
         this.draw()
         this.drawBaseColorCircle(rad);
+      this.updateSelectColor(2.5 * Math.PI - Math.atan2(x,y) );
       } else if (z < inRad2 && donutRad2 <= z) {
         this.draw()
         this.drawBaseColorCircle(rad)
+      this.updateSelectColor(2.5 * Math.PI - Math.atan2(x,y) );
       }
     },
     onClick: function(e) {
@@ -211,7 +213,6 @@ export default {
       let x = e.clientX - rect.left - this.halfsize;
       let y = e.clientY - rect.top - this.halfsize;
       this.drawAll(x,y)
-      this.updateSelectColor(Math.atan2(x,y) + Math.PI);
     },
     // onMouseUp: function() {
     //   this.isMouseDown = false;
