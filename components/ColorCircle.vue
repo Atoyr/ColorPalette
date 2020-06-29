@@ -1,9 +1,32 @@
 <template>
-  <canvas width="400" height="400" ref="canv" class="canv" @click="onClick"></canvas>
+  <div>
+    <canvas 
+      width="400" 
+      height="400" 
+      ref="canv" 
+      class="canv" 
+      @click="onClick" 
+      ></canvas>
+  </div>
 </template>
 
 <script>
 const basesize = 400
+let timer;
+
+/*
+ * 連続イベント間引き処理
+ * @param {obj} targetFunc 処理したい関数
+ * @param {num} time 何ミリ秒以内の処理をスキップするか
+ */
+function throttle(targetFunc, time) {
+    var _time = time || 100;
+    clearTimeout(timer);
+    timer = setTimeout(function () {
+        targetFunc();
+    }, _time);
+}
+
 export default {
   props: {
     mag: {
@@ -15,6 +38,10 @@ export default {
       default: 32
     },
     borderWidth: {
+      type: Number,
+      default: 2
+    },
+    selectLineWidth: {
       type: Number,
       default: 2
     },
@@ -54,7 +81,8 @@ export default {
   },
   data() {
     return {
-      halfsize : this.mag * basesize / 2
+      halfsize : this.mag * basesize / 2,
+      isMouseDown : false,
     }
   },
   methods: {
@@ -141,45 +169,64 @@ export default {
       let donutringRad = this.halfsize - this.lineWidth * 2;
       this.ctx.beginPath();
       this.ctx.strokeStyle = 'rgb(255,255,255)'
-      this.ctx.lineWidth = 4
+      this.ctx.lineWidth = this.selectLineWidth
       this.ctx.arc(
         this.halfsize - Math.sin(rad) * (outringRad - this.lineWidth / 2 - this.borderWidth)
         ,this.halfsize - Math.cos(rad) * (outringRad - this.lineWidth / 2 - this.borderWidth)
-        ,(this.lineWidth - 8 )/2
+        ,this.lineWidth /2 - this.selectLineWidth
         ,0
         ,2 * Math.PI)
       this.ctx.stroke()
     },
-    onClick: function(e) {
+    drawAll(x,y) {
       let outringRad = this.halfsize;
       let inringRad = this.halfsize - this.lineWidth;
       let donutringRad = this.halfsize - this.lineWidth * 2;
 
-      let rect = e.target.getBoundingClientRect();
-      let x = e.clientX - rect.left - this.halfsize;
-      let y = e.clientY - rect.top - this.halfsize;
       let z = x * x + y * y
 
       let outRad2 = outringRad * outringRad
       let inRad2 = inringRad * inringRad
       let donutRad2 = donutringRad * donutringRad
+      let rad = Math.atan2(x,y) + Math.PI;
+      if (rad < 0 ) {
+        rad = rad + Math.PI;
+      }
 
-      console.log(x,y)
-      console.log(Math.atan2(x,y) * 180 / Math.PI)
       if (z < outRad2 && inRad2 <= z) {
-        let rad = Math.atan2(x,y) + Math.PI;
-        if (rad < 0 ) {
-          rad = rad + Math.PI;
-        }
         this.draw()
         this.drawBaseColorCircle(rad);
       } else if (z < inRad2 && donutRad2 <= z) {
-        let rad = Math.atan2(x,y) + Math.PI / 2; 
-
+        let temp = rad - (1 / this.division)
+        rad = parseInt(temp / (2 / this.division)) * (2/this.division)
+        
         this.draw()
         this.drawBaseColorCircle(rad)
       }
-    }
+    },
+    onClick: function(e) {
+      let rect = e.target.getBoundingClientRect();
+      let x = e.clientX - rect.left - this.halfsize;
+      let y = e.clientY - rect.top - this.halfsize;
+      this.drawAll(x,y)
+    },
+    // onMouseUp: function() {
+    //   this.isMouseDown = false;
+    // },
+    // onMouseDown: function() {
+    //   console.log("foo")
+    //   this.isMouseDown = true;
+    // },
+    // onMouseMove: function(e) {
+    //   if (this.isMouseDown) {
+    //     throttle(() => {
+    //       let rect = e.target.getBoundingClientRect();
+    //       let x = e.clientX - rect.left - this.halfsize;
+    //       let y = e.clientY - rect.top - this.halfsize;
+    //       this.drawAll(x,y)
+    //     }, 100);
+    //   }
+    // }
   },
   mounted() {
     this.ctx = this.$refs.canv.getContext('2d')
