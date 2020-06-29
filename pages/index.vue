@@ -17,14 +17,23 @@
          type="range" value="1" min="0" max="1" step="0.01" v-model="valueBrightness"></input>
       <p class="slider-text">{{vvalueBrightness}}</p>
     </div>
+    <div>
+      <p>HSV : {{selectColor[0]}} {{selectColor[1]}} {{selectColor[2]}}</p>
+      <p>RGB : {{selectRGBColor[0]}} {{selectRGBColor[1]}} {{selectRGBColor[2]}}</p>
+    </div>
+    <div>
+      <colorBox  :borderColor="selectRGBColor"></colorBox>
+    </div>
   </div>
 </template>
 
 <script>
 import ColorCircle from '@/components/ColorCircle.vue'
+import colorBox from '@/components/box.vue'
 export default {
   components : {
-    ColorCircle
+    ColorCircle,
+    colorBox
   },
   computed: {
     size: function() {
@@ -46,13 +55,17 @@ export default {
         this.$store.commit('updateValueBrightness', value);
       }
     },
-    baseColor: {
+    selectColor: {
       get() {
-        return this.$store.state.baseColor;
+        return this.$store.state.selectColor;
       },
       set(value) {
-        this.$store.commit('updateBaseColor', value);
-        this.draw();
+        this.$store.commit('updateSelectColor', value);
+      }
+    },
+    selectRGBColor: {
+      get() {
+        return this.$hsv2rgb(this.selectColor);
       }
     },
     vsaturation: function(){

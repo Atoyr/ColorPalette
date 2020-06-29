@@ -1,8 +1,8 @@
 <template>
   <div>
     <canvas 
-      width="400" 
-      height="400" 
+      :width="size" 
+      :height="size" 
       ref="canv" 
       class="canv" 
       @click="onClick" 
@@ -11,7 +11,9 @@
 </template>
 
 <script>
-const basesize = 400
+import { mapActions } from 'vuex'
+
+const basesize = 360
 let timer;
 
 /*
@@ -70,12 +72,12 @@ export default {
         this.$store.commit('updateValueBrightness', value);
       }
     },
-    baseColor: {
+    selectColor: {
       get() {
-        return this.$store.state.baseColor;
+        return this.$store.state.selectColor;
       },
       set(value) {
-        this.$store.commit('updateBaseColor', value);
+        this.$store.commit('updateSelectColor', value);
       }
     }
   },
@@ -86,6 +88,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions([
+      'applySelectColor'
+      ]),
     draw: function() {
       this.ctx.beginPath();
       this.ctx.clearRect(0, 0, this.size, this.size);
@@ -197,9 +202,6 @@ export default {
         this.draw()
         this.drawBaseColorCircle(rad);
       } else if (z < inRad2 && donutRad2 <= z) {
-    //    let temp = rad - (1 / this.division)
-    //    rad = parseInt(temp / (2 / this.division)) * (2/this.division)
-    //    
         this.draw()
         this.drawBaseColorCircle(rad)
       }
@@ -209,6 +211,7 @@ export default {
       let x = e.clientX - rect.left - this.halfsize;
       let y = e.clientY - rect.top - this.halfsize;
       this.drawAll(x,y)
+      this.updateSelectColor(Math.atan2(x,y) + Math.PI);
     },
     // onMouseUp: function() {
     //   this.isMouseDown = false;
@@ -227,6 +230,11 @@ export default {
     //     }, 100);
     //   }
     // }
+    updateSelectColor: function(rad) {
+      let angle = parseInt(rad * 180 / Math.PI);
+      let hsv = [angle,this.saturation,this.valueBrightness]
+      this.applySelectColor(hsv)
+    },
   },
   mounted() {
     this.ctx = this.$refs.canv.getContext('2d')

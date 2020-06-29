@@ -1,7 +1,7 @@
 export const state = () => ({
   saturation: 0.8,
   valueBrightness: 0.8,
-  baseColor: [255,0,0],
+  selectColor: [255,0.8,0.8]
 })
 
 export const mutations = {
@@ -15,10 +15,19 @@ export const mutations = {
       state.valueBrightness = valueBrightness
     }
   },
-  updateBaseColor(state, baseColor) {
-    if (0 <= baseColor && baseColor <= 1){
-      state.baseColor = baseColor
+  updateSelectColor(state, selectColor) {
+    let sc = selectColor
+    if (sc.length == 3){
+      sc[0] = sc[0] % 360
+      for (let i = 1; i < 3; i++) {
+        if (sc[i] < 0 ) {
+          sc[i] = 0.0
+        }else if (1 < sc[i] ) {
+          sc[i] = 1.0
+        }
+      }
     }
+    state.selectColor = sc;
   },
 }
 
@@ -26,4 +35,7 @@ export const getters = {
 }
 
 export const actions = {
+  applySelectColor({commit}, selectColor) {
+    commit('updateSelectColor', selectColor)
+  },
 }
