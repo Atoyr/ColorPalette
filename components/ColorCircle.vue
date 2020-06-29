@@ -197,9 +197,9 @@ export default {
         this.draw()
         this.drawBaseColorCircle(rad);
       } else if (z < inRad2 && donutRad2 <= z) {
-        let temp = rad - (1 / this.division)
-        rad = parseInt(temp / (2 / this.division)) * (2/this.division)
-        
+    //    let temp = rad - (1 / this.division)
+    //    rad = parseInt(temp / (2 / this.division)) * (2/this.division)
+    //    
         this.draw()
         this.drawBaseColorCircle(rad)
       }
