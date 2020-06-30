@@ -107,7 +107,7 @@ export default {
     ...mapActions([
       'applySelectColor'
       ]),
-    draw: function() {
+    drawCircle: function() {
       this.ctx.beginPath();
       this.ctx.clearRect(0, 0, this.size, this.size);
       this.ctx.globalCompositeOperation = "source-over"
@@ -186,7 +186,7 @@ export default {
       }
     },
     // rad is radian
-    drawBaseColorCircle: function(rad) {
+    drawSelectColorCircle: function(rad) {
       let outring = this.halfsize;
       rad = rad2canvas(rad)
       this.ctx.beginPath();
@@ -200,33 +200,41 @@ export default {
         ,2 * Math.PI)
       this.ctx.stroke()
     },
-    drawAll: function(x,y) {
-      let outring = this.halfsize;
-      let inring = this.halfsize - this.lineWidth;
-      let donutring = this.halfsize - this.lineWidth * 2;
-
-      let z = x * x + y * y
-
-      let outring2 = outring * outring;
-      let inring2 = inring * inring;
-      let donutring2 = donutring * donutring;
-      let rad = atan2rad(Math.atan2(x,y));
-
-      if (z < outring2 && inring2 <= z) {
-        this.draw();
-        this.drawBaseColorCircle(rad);
-        this.updateSelectColor(rad);
-      } else if (z < inring2 && donutring2 <= z) {
-        this.draw();
-        this.drawBaseColorCircle(rad);
-        this.updateSelectColor(rad);
-      }
+    draw: function() {
+      this.drawCircle();
+      let angle = this.selectColor[0];
+      this.updateSelectColor(rad2canvas(angle/180 * Math.PI));
+      this.drawSelectColorCircle(rad2canvas(angle/180 * Math.PI));
     },
     onClick: function(e) {
       let rect = e.target.getBoundingClientRect();
       let x = e.clientX - rect.left - this.halfsize;
       let y = e.clientY - rect.top - this.halfsize;
-      this.drawAll(x,y)
+
+      // let outring = this.halfsize;
+      // let inring = this.halfsize - this.lineWidth;
+      // let donutring = this.halfsize - this.lineWidth * 2;
+
+      // let z = x * x + y * y
+
+      // let outring2 = outring * outring;
+      // let inring2 = inring * inring;
+      // let donutring2 = donutring * donutring;
+      // let rad = atan2rad(Math.atan2(x,y));
+
+      // if (z < outring2 && inring2 <= z) {
+      //   this.drawCircle();
+      //   this.drawSelectColorCircle(rad);
+      //   this.updateSelectColor(rad);
+      // } else if (z < inring2 && donutring2 <= z) {
+      //   this.drawCircle();
+      //   this.drawSelectColorCircle(rad);
+      //   this.updateSelectColor(rad);
+      // }
+
+      let rad = atan2rad(Math.atan2(x,y));
+      this.updateSelectColor(rad)
+      this.draw()
     },
     // onMouseUp: function() {
     //   this.isMouseDown = false;
@@ -241,14 +249,13 @@ export default {
     //       let rect = e.target.getBoundingClientRect();
     //       let x = e.clientX - rect.left - this.halfsize;
     //       let y = e.clientY - rect.top - this.halfsize;
-    //       this.drawAll(x,y)
+    //       this.dall(x,y)
     //     }, 100);
     //   }
     // }
     // rad is radian
     updateSelectColor: function(rad) {
       let canvasrad = rad2canvas(rad)
-      console.log(rad * 180/Math.PI, canvasrad * 180/Math.PI)
       let angle = parseInt(canvasrad * 180 / Math.PI);
       let hsv = [angle,this.saturation,this.valueBrightness]
       this.applySelectColor(hsv)
@@ -256,9 +263,9 @@ export default {
   },
   mounted() {
     this.ctx = this.$refs.canv.getContext('2d');
-    this.draw();
+    this.drawCircle();
     this.updateSelectColor(0);
-    this.drawBaseColorCircle(0);
+    this.drawSelectColorCircle(0);
   }
 }
 </script>
