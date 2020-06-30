@@ -31,7 +31,9 @@
     <div class="color-div py-2">
       <colorBox v-for="n of 8" :borderColor="selectRGBColor" :color="[32 * (n - 1),32 * (n - 1),32 * (n - 1)]"></colorBox>
     </div>
-    <div class="circle" :style="circleStyle"></div>
+    <div class="slider-wrapper py-2">
+        <div v-for="cs in circleStyles" class="circle px-2" :style="cs"></div>
+    </div>
   </div>
 </template>
 
@@ -100,11 +102,17 @@ export default {
         '--bg': this.selectColorHex
       }
     },
-    circleStyle() {
-      return {
-        '--bg-first': this.selectColorHex,
-        '--bg-second': "#FFFFFF"
-      }
+    circleStyles() {
+      return [
+        {
+          '--bg-first': this.selectColorHex,
+          '--bg-second': "#FFFFFF"
+        },
+        {
+          '--bg-first': this.selectColorHex,
+          '--bg-second': "#000000"
+        }
+      ]
     }
 
   },
@@ -152,8 +160,8 @@ export default {
   align-items: center;
 }
 .circle {
-  --width: 32px;
-  --height: 32px;
+  --width: 90px;
+  --height: 90px;
   --bg-first: #FFFFFF;
   --bg-second: #000000;
   --bg-gradient: linear-gradient(var(--bg-first),var(--bg-second));
