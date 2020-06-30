@@ -29,6 +29,22 @@ function throttle(targetFunc, time) {
     }, _time);
 }
 
+function atan2rad(atan) {
+  return atan > 0.5 * Math.PI ? atan - 0.5 * Math.PI :  atan + 1.5 * Math.PI;
+}
+
+function canvas2rad(canvas) {
+  return canvas - 2.5 * Math.PI;
+}
+
+function atan2canvas(atan) {
+  return atan > 0.5 * Math.PI ? 2.5 * Math.PI - atan : 0.5 * Math.PI - atan;
+}
+
+function rad2canvas(rad) {
+  return 2 * Math.PI - rad;
+}
+
 export default {
   props: {
     mag: {
@@ -102,14 +118,15 @@ export default {
       let divangle = 2 / this.division
 
       for (let i = 0 ; i < this.division; i++) {
-        let h = 360 / this.division * i
+        let angle = 360 / this.division * i
 
-        let rgb = this.$hsv2rgb([h,this.saturation,this.valueBrightness])
-        let rgb1 = this.$hsv2rgb([h + (360 / this.division / 4 * 1), this.saturation, this.valueBrightness])
-        let rgb2 = this.$hsv2rgb([h + (360 / this.division / 4 * 2), this.saturation, this.valueBrightness])
-        let rgb3 = this.$hsv2rgb([h + (360 / this.division / 4 * 3), this.saturation, this.valueBrightness])
-        let rgb4 = this.$hsv2rgb([h + (360 / this.division), this.saturation, this.valueBrightness])
+        let rgb = this.$hsv2rgb([angle ,this.saturation,this.valueBrightness])
+        let rgb1 = this.$hsv2rgb([angle + (360 / this.division / 4 * 1), this.saturation, this.valueBrightness])
+        let rgb2 = this.$hsv2rgb([angle + (360 / this.division / 4 * 2), this.saturation, this.valueBrightness])
+        let rgb3 = this.$hsv2rgb([angle + (360 / this.division / 4 * 3), this.saturation, this.valueBrightness])
+        let rgb4 = this.$hsv2rgb([angle + (360 / this.division), this.saturation, this.valueBrightness])
 
+        // canvas radian
         let outringStr = divangle * i * Math.PI
         let outringEnd = divangle * (i + 1) * Math.PI
         let inringStr = (divangle * i - divangle/2 ) * Math.PI
@@ -168,41 +185,41 @@ export default {
         this.ctx.fill();
       }
     },
-    drawBaseColorCircle: function(rad){
-      let outringRad = this.halfsize;
-      let inringRad = this.halfsize - this.lineWidth;
-      let donutringRad = this.halfsize - this.lineWidth * 2;
+    // rad is radian
+    drawBaseColorCircle: function(rad) {
+      let outring = this.halfsize;
+      rad = rad2canvas(rad)
       this.ctx.beginPath();
       this.ctx.strokeStyle = 'rgb(255,255,255)'
       this.ctx.lineWidth = this.selectLineWidth
       this.ctx.arc(
-        this.halfsize - Math.sin(rad) * (outringRad - this.lineWidth / 2 - this.borderWidth)
-        ,this.halfsize - Math.cos(rad) * (outringRad - this.lineWidth / 2 - this.borderWidth)
+        this.halfsize + Math.cos(rad) * (outring - this.lineWidth / 2 - this.borderWidth)
+        ,this.halfsize + Math.sin(rad) * (outring - this.lineWidth / 2 - this.borderWidth)
         ,this.lineWidth /2 - this.selectLineWidth
         ,0
         ,2 * Math.PI)
       this.ctx.stroke()
     },
-    drawAll(x,y) {
-      let outringRad = this.halfsize;
-      let inringRad = this.halfsize - this.lineWidth;
-      let donutringRad = this.halfsize - this.lineWidth * 2;
+    drawAll: function(x,y) {
+      let outring = this.halfsize;
+      let inring = this.halfsize - this.lineWidth;
+      let donutring = this.halfsize - this.lineWidth * 2;
 
       let z = x * x + y * y
 
-      let outRad2 = outringRad * outringRad
-      let inRad2 = inringRad * inringRad
-      let donutRad2 = donutringRad * donutringRad
-      let rad = 2.5 * Math.PI + Math.atan2(x,y)
+      let outring2 = outring * outring;
+      let inring2 = inring * inring;
+      let donutring2 = donutring * donutring;
+      let rad = atan2rad(Math.atan2(x,y));
 
-      if (z < outRad2 && inRad2 <= z) {
-        this.draw()
+      if (z < outring2 && inring2 <= z) {
+        this.draw();
         this.drawBaseColorCircle(rad);
-      this.updateSelectColor(2.5 * Math.PI - Math.atan2(x,y) );
-      } else if (z < inRad2 && donutRad2 <= z) {
-        this.draw()
-        this.drawBaseColorCircle(rad)
-      this.updateSelectColor(2.5 * Math.PI - Math.atan2(x,y) );
+        this.updateSelectColor(rad);
+      } else if (z < inring2 && donutring2 <= z) {
+        this.draw();
+        this.drawBaseColorCircle(rad);
+        this.updateSelectColor(rad);
       }
     },
     onClick: function(e) {
@@ -228,8 +245,11 @@ export default {
     //     }, 100);
     //   }
     // }
+    // rad is radian
     updateSelectColor: function(rad) {
-      let angle = parseInt(rad * 180 / Math.PI);
+      let canvasrad = rad2canvas(rad)
+      console.log(rad * 180/Math.PI, canvasrad * 180/Math.PI)
+      let angle = parseInt(canvasrad * 180 / Math.PI);
       let hsv = [angle,this.saturation,this.valueBrightness]
       this.applySelectColor(hsv)
     },
