@@ -193,10 +193,7 @@ export default {
       let outRad2 = outringRad * outringRad
       let inRad2 = inringRad * inringRad
       let donutRad2 = donutringRad * donutringRad
-      let rad = Math.atan2(x,y) + Math.PI;
-      if (rad < 0 ) {
-        rad = rad + Math.PI;
-      }
+      let rad = 2.5 * Math.PI + Math.atan2(x,y)
 
       if (z < outRad2 && inRad2 <= z) {
         this.draw()
@@ -238,8 +235,10 @@ export default {
     },
   },
   mounted() {
-    this.ctx = this.$refs.canv.getContext('2d')
-    this.draw()
+    this.ctx = this.$refs.canv.getContext('2d');
+    this.draw();
+    this.updateSelectColor(0);
+    this.drawBaseColorCircle(0);
   }
 }
 </script>
