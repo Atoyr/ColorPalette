@@ -4,11 +4,6 @@
 </template>
 
 <script>
-function toPaddedHexString(num, len) {
-    let str = num.toString(16);
-    return "0".repeat(len - str.length) + str;
-}
-
 export default {
   props: {
     color: {
@@ -23,10 +18,10 @@ export default {
   computed: {
     styleValiables() {
       return {
-        '--colorbox-size': '45px',
-        '--colorbox-border': '11px',
-        '--colorbox-background': `#${toPaddedHexString(this.color[0],2)}${toPaddedHexString(this.color[1],2)}${toPaddedHexString(this.color[2],2)}`,
-        '--colorbox-borderColor': `#${toPaddedHexString(this.borderColor[0],2)}${toPaddedHexString(this.borderColor[1],2)}${toPaddedHexString(this.borderColor[2],2)}`
+        '--colorbox-size': '2.5rem',
+        '--colorbox-border': '0.65rem',
+        '--colorbox-background': `#${this.$toPaddedHexString(this.color[0],2)}${this.$toPaddedHexString(this.color[1],2)}${this.$toPaddedHexString(this.color[2],2)}`,
+        '--colorbox-borderColor': `#${this.$toPaddedHexString(this.borderColor[0],2)}${this.$toPaddedHexString(this.borderColor[1],2)}${this.$toPaddedHexString(this.borderColor[2],2)}`
       }
     }
   }

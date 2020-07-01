@@ -39,6 +39,10 @@ export default {
     {
       src:'@/plugins/hsv2rgb',
       ssr: false
+    },
+    {
+      src:'@/plugins/colorUtil',
+      ssr: false
     }
   ],
   /*
