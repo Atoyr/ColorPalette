@@ -18,8 +18,8 @@ export default {
   computed: {
     styleValiables() {
       return {
-        '--colorbox-size': '2.5rem',
-        '--colorbox-border': '0.65rem',
+        '--colorbox-size': '2rem',
+        '--colorbox-border': '0.5rem',
         '--colorbox-background': `#${this.$toPaddedHexString(this.color[0],2)}${this.$toPaddedHexString(this.color[1],2)}${this.$toPaddedHexString(this.color[2],2)}`,
         '--colorbox-borderColor': `#${this.$toPaddedHexString(this.borderColor[0],2)}${this.$toPaddedHexString(this.borderColor[1],2)}${this.$toPaddedHexString(this.borderColor[2],2)}`
       }
