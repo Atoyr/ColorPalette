@@ -6,17 +6,21 @@
       <div class="select-color" :style="secondColorSytle"></div>
       <P>{{secondColorCode}}</p>
     </div>
-    <div class="flex-row align-items-center py-1">
-      <ColorBox v-for="n of 8" :color="firstColor" :borderColor="[32 * (n - 1),32 * (n - 1),32 * (n - 1)]"></colorBox>
+    <div class="flex-column py-1">
+      <div class="flex-row align-items-center">
+        <ColorBox v-for="n of 8" :color="firstColor" :borderColor="[32 * (n - 1),32 * (n - 1),32 * (n - 1)]"></colorBox>
+      </div>
+      <div class="flex-row">
+        <ColorBox v-for="n of 8" :borderColor="firstColor" :color="[32 * (n - 1),32 * (n - 1),32 * (n - 1)]"></colorBox>
+      </div>
     </div>
-    <div class="flex-row py-1">
-      <ColorBox v-for="n of 8" :borderColor="firstColor" :color="[32 * (n - 1),32 * (n - 1),32 * (n - 1)]"></colorBox>
-    </div>
-    <div class="flex-row align-items-center py-1">
-      <ColorBox v-for="n of 8" :color="secondColor" :borderColor="[32 * (n - 1),32 * (n - 1),32 * (n - 1)]"></colorBox>
-    </div>
-    <div class="flex-row py-1">
-      <ColorBox v-for="n of 8" :borderColor="secondColor" :color="[32 * (n - 1),32 * (n - 1),32 * (n - 1)]"></colorBox>
+    <div class="flex-column py-1">
+      <div class="flex-row align-items-center">
+        <ColorBox v-for="n of 8" :color="secondColor" :borderColor="[32 * (n - 1),32 * (n - 1),32 * (n - 1)]"></colorBox>
+      </div>
+      <div class="flex-row">
+        <ColorBox v-for="n of 8" :borderColor="secondColor" :color="[32 * (n - 1),32 * (n - 1),32 * (n - 1)]"></colorBox>
+      </div>
     </div>
     <div class="flex-row py-1">
         <div v-for="cs in circleStyles" class="circle mx-2" :style="cs"></div>

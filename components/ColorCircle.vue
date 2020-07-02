@@ -72,12 +72,20 @@ export default {
     size: function() {
       return this.mag * basesize;
     },
+    hue: {
+      get() {
+        return this.$store.state.hue;
+      },
+      set(value) {
+        this.$store.dispatch('applyHue', value);
+      }
+    },
     saturation: {
       get() {
         return this.$store.state.saturation;
       },
       set(value) {
-        this.$store.commit('updateSaturation', value);
+        this.$store.dispatch('applySaturation', value);
       }
     },
     valueBrightness: {
@@ -85,17 +93,9 @@ export default {
         return this.$store.state.valueBrightness;
       },
       set(value) {
-        this.$store.commit('updateValueBrightness', value);
+        this.$store.dispatch('applyValueBrightness', value);
       }
     },
-    selectColor: {
-      get() {
-        return this.$store.state.selectColor;
-      },
-      set(value) {
-        this.$store.commit('updateSelectColor', value);
-      }
-    }
   },
   data() {
     return {
@@ -104,9 +104,6 @@ export default {
     }
   },
   methods: {
-    ...mapActions([
-      'applySelectColor'
-      ]),
     drawCircle: function() {
       this.ctx.beginPath();
       this.ctx.clearRect(0, 0, this.size, this.size);
@@ -202,8 +199,8 @@ export default {
     },
     draw: function() {
       this.drawCircle();
-      let angle = this.selectColor[0];
-      this.updateSelectColor(rad2canvas(angle/180 * Math.PI));
+      let angle = this.hue;
+      this.updateHue(rad2canvas(angle/180 * Math.PI));
       this.drawSelectColorCircle(rad2canvas(angle/180 * Math.PI));
     },
     onClick: function(e) {
@@ -225,15 +222,15 @@ export default {
       // if (z < outring2 && inring2 <= z) {
       //   this.drawCircle();
       //   this.drawSelectColorCircle(rad);
-      //   this.updateSelectColor(rad);
+      //   this.updateHue(rad);
       // } else if (z < inring2 && donutring2 <= z) {
       //   this.drawCircle();
       //   this.drawSelectColorCircle(rad);
-      //   this.updateSelectColor(rad);
+      //   this.updateHue(rad);
       // }
 
       let rad = atan2rad(Math.atan2(x,y));
-      this.updateSelectColor(rad)
+      this.updateHue(rad)
       this.draw()
     },
     // onMouseUp: function() {
@@ -254,17 +251,16 @@ export default {
     //   }
     // }
     // rad is radian
-    updateSelectColor: function(rad) {
-      let canvasrad = rad2canvas(rad)
+    updateHue: function(rad) {
+      let canvasrad = rad2canvas(rad);
       let angle = parseInt(canvasrad * 180 / Math.PI);
-      let hsv = [angle,this.saturation,this.valueBrightness]
-      this.applySelectColor(hsv)
+      this.hue = angle;
     },
   },
   mounted() {
     this.ctx = this.$refs.canv.getContext('2d');
     this.drawCircle();
-    this.updateSelectColor(0);
+    this.updateHue(0);
     this.drawSelectColorCircle(0);
   }
 }
