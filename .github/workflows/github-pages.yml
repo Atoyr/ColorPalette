@@ -23,7 +23,7 @@ jobs:
     - name: install
       run: npm ci
     - name: generate
-      run: npm run generate
+      run: npm run generate:gh-pages
     - name: deploy
       uses: peaceiris/actions-gh-pages@v3
       with:
