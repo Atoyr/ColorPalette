@@ -11,23 +11,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
-
-const basesize = 360
-let timer;
-
-/*
- * 連続イベント間引き処理
- * @param {obj} targetFunc 処理したい関数
- * @param {num} time 何ミリ秒以内の処理をスキップするか
- */
-function throttle(targetFunc, time) {
-    var _time = time || 100;
-    clearTimeout(timer);
-    timer = setTimeout(function () {
-        targetFunc();
-    }, _time);
-}
+const basesize = 320
 
 function atan2rad(atan) {
   return atan > 0.5 * Math.PI ? atan - 0.5 * Math.PI :  atan + 1.5 * Math.PI;
@@ -207,49 +191,10 @@ export default {
       let rect = e.target.getBoundingClientRect();
       let x = e.clientX - rect.left - this.halfsize;
       let y = e.clientY - rect.top - this.halfsize;
-
-      // let outring = this.halfsize;
-      // let inring = this.halfsize - this.lineWidth;
-      // let donutring = this.halfsize - this.lineWidth * 2;
-
-      // let z = x * x + y * y
-
-      // let outring2 = outring * outring;
-      // let inring2 = inring * inring;
-      // let donutring2 = donutring * donutring;
-      // let rad = atan2rad(Math.atan2(x,y));
-
-      // if (z < outring2 && inring2 <= z) {
-      //   this.drawCircle();
-      //   this.drawSelectColorCircle(rad);
-      //   this.updateHue(rad);
-      // } else if (z < inring2 && donutring2 <= z) {
-      //   this.drawCircle();
-      //   this.drawSelectColorCircle(rad);
-      //   this.updateHue(rad);
-      // }
-
       let rad = atan2rad(Math.atan2(x,y));
       this.updateHue(rad)
       this.draw()
     },
-    // onMouseUp: function() {
-    //   this.isMouseDown = false;
-    // },
-    // onMouseDown: function() {
-    //   console.log("foo")
-    //   this.isMouseDown = true;
-    // },
-    // onMouseMove: function(e) {
-    //   if (this.isMouseDown) {
-    //     throttle(() => {
-    //       let rect = e.target.getBoundingClientRect();
-    //       let x = e.clientX - rect.left - this.halfsize;
-    //       let y = e.clientY - rect.top - this.halfsize;
-    //       this.dall(x,y)
-    //     }, 100);
-    //   }
-    // }
     // rad is radian
     updateHue: function(rad) {
       let canvasrad = rad2canvas(rad);
