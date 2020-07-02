@@ -4,6 +4,13 @@
       <ColorCircle ref="colorCircle"></ColorCircle>
     </div>
     <div class="flex-row align-items-center">
+      <p class="slider-text">H</p>
+      <input 
+         class="slider"
+         type="range" value="0" min="0" max="359" step="1" v-model="hue"></input>
+      <p class="slider-text">{{hue}}</p>
+    </div>
+    <div class="flex-row align-items-center">
       <p class="slider-text">S</p>
       <input 
          class="slider"
@@ -18,10 +25,10 @@
       <p class="slider-text">{{vvalueBrightness}}</p>
     </div>
     <div>
-      <p>HSV : {{selectColor[0]}} {{selectColor[1] * 100}} {{selectColor[2] * 100}}</p>
-      <p>RGB : {{selectRGBColor[0]}} {{selectRGBColor[1]}} {{selectRGBColor[2]}}</p>
+      <p>HSV : {{hue}} {{saturation}} {{valueBrightness}}</p>
+      <p>RGB : {{myColor[0]}} {{myColor[1]}} {{myColor[2]}}</p>
     </div>
-    <ColorView :firstColor="selectRGBColor" :secondColor="[255,255,255]"></ColorView>
+    <ColorView :firstColor="myColor" :secondColor="[255,255,255]"></ColorView>
   </div>
 </template>
 
@@ -38,12 +45,21 @@ export default {
     size: function() {
       return this.mag * basesize;
     },
+    hue: {
+      get() {
+        return this.$store.state.hue;
+      },
+      set(value) {
+        this.$store.dispatch('applyHue', value);
+        this.$refs.colorCircle.draw();
+      }
+    },
     saturation: {
       get() {
         return this.$store.state.saturation;
       },
       set(value) {
-        this.$store.commit('updateSaturation', value);
+        this.$store.dispatch('applySaturation', value);
         this.$refs.colorCircle.draw();
       }
     },
@@ -52,26 +68,18 @@ export default {
         return this.$store.state.valueBrightness;
       },
       set(value) {
-        this.$store.commit('updateValueBrightness', value);
+        this.$store.dispatch('applyValueBrightness', value);
         this.$refs.colorCircle.draw();
       }
     },
-    selectColor: {
+    myColor: {
       get() {
-        return this.$store.state.selectColor;
-      },
-      set(value) {
-        this.$store.commit('updateSelectColor', value);
+        return this.$hsv2rgb([this.hue,this.saturation,this.valueBrightness]);
       }
     },
-    selectRGBColor: {
+    myColorCode: {
       get() {
-        return this.$hsv2rgb(this.selectColor);
-      }
-    },
-    selectColorHex: {
-      get() {
-        return this.$toColorCode(this.selectRGBColor);
+        return this.$toColorCode(this.myColor);
       }
     },
     vsaturation: function(){
@@ -80,24 +88,11 @@ export default {
     vvalueBrightness : function(){
       return parseInt(this.valueBrightness * 100)
     },
-    selectColorSytle() {
+    myColorStyle() {
       return {
-        '--bg': this.selectColorHex
+        '--bg': this.myColorCode
       }
     },
-    circleStyles() {
-      return [
-        {
-          '--bg-first': this.selectColorHex,
-          '--bg-second': "#FFFFFF"
-        },
-        {
-          '--bg-first': this.selectColorHex,
-          '--bg-second': "#000000"
-        }
-      ]
-    }
-
   },
   data() {
     return{
@@ -112,9 +107,5 @@ export default {
 }
 .slider-text {
   width: 32px;
-}
-.select-color-view {
-  --width: 360px;
-  width: var(--width);
 }
 </style>

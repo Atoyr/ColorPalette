@@ -1,33 +1,30 @@
 export const state = () => ({
+  hue: 0,
   saturation: 0.8,
   valueBrightness: 0.8,
-  selectColor: [255,0.8,0.8]
 })
 
 export const mutations = {
+  updateHue(state, hue) {
+    state.hue = hue % 360
+  },
   updateSaturation(state, saturation) {
-    if (0 <= saturation && saturation <= 1){
-      state.saturation = saturation
+    let s = saturation;
+    if ( s < 0) {
+      s = 0;
+    }else if ( 1 < s) {
+      s = 1;
     }
+    state.saturation = s;
   },
   updateValueBrightness(state, valueBrightness) {
-    if (0 <= valueBrightness && valueBrightness <= 1){
-      state.valueBrightness = valueBrightness
+    let v = valueBrightness;
+    if ( v < 0) {
+      v = 0;
+    }else if ( 1 < v) {
+      v = 1;
     }
-  },
-  updateSelectColor(state, selectColor) {
-    let sc = selectColor
-    if (sc.length == 3){
-      sc[0] = sc[0] % 360
-      for (let i = 1; i < 3; i++) {
-        if (sc[i] < 0 ) {
-          sc[i] = 0.0
-        }else if (1 < sc[i] ) {
-          sc[i] = 1.0
-        }
-      }
-    }
-    state.selectColor = sc;
+    state.valueBrightness = v;
   },
 }
 
@@ -35,7 +32,13 @@ export const getters = {
 }
 
 export const actions = {
-  applySelectColor({commit}, selectColor) {
-    commit('updateSelectColor', selectColor)
+  applyHue({commit}, hue) {
+    commit('updateHue', hue)
+  },
+  applySaturation({commit}, saturation) {
+    commit('updateSaturation', saturation)
+  },
+  applyValueBrightness({commit}, valueBrightness) {
+    commit('updateValueBrightness', valueBrightness)
   },
 }
