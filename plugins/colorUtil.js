@@ -1,5 +1,8 @@
 const toPaddedHexString = function (num, len) {
+    if( num < 0 ) { num = 0 }
+    if(Math.pow(16 ,len) <= num ) { num = Math.pow(16,len) - 1 }
     let str = parseInt(num).toString(16).toUpperCase();
+    
     return "0".repeat(len - str.length) + str;
 }
 

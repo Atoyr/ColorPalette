@@ -125,7 +125,7 @@ export default {
 .select-color {
   --bg: #FFFFFF;
   background-color: var(--bg);
-  width: 6rem;
+  width: 5rem;
   height: 8rem;
   display: flex;
   justify-content: center;
