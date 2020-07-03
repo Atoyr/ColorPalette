@@ -6,8 +6,8 @@
       </div>
     </div>
     <ColorBrightness v-for="c in colors" class="py-1" :color="c"></ColorBrightness>
-    <div class="flex-row py-1">
-        <div v-for="cs in circleStyles" class="circle mx-2" :style="cs"></div>
+    <div class="flex-row py-1" v-for="cs in circleStyles">
+      <div v-for="c in cs" class="circle px-1 py-1" :style="c"></div>
     </div>
   </div>
 </template>
@@ -58,26 +58,6 @@ export default {
     fourthColorCode() {
         return this.$toColorCode(this.fourthColor)
     },
-    firstColorStyle() {
-      return {
-        '--bg': this.firstColorCode
-      }
-    },
-    secondColorStyle() {
-      return {
-        '--bg': this.secondColorCode
-      }
-    },
-    thirdColorStyle() {
-      return {
-        '--bg': this.thirdColorCode
-      }
-    },
-    fourthColorStyle() {
-      return {
-        '--bg': this.fourthColorCode
-      }
-    },
     colorCodes() {
       return[
         this.firstColorCode,
@@ -88,7 +68,7 @@ export default {
     },
     circleStyles() {
       return [
-        {
+        [{
           '--bg-first': this.firstColorCode,
           '--bg-second': "#FFFFFF"
         },
@@ -97,13 +77,77 @@ export default {
           '--bg-second': "#000000"
         },
         {
+          '--bg-first': this.firstColorCode,
+          '--bg-second': this.secondColorCode
+        },
+        {
+          '--bg-first': this.firstColorCode,
+          '--bg-second': this.thirdColorCode
+        },  
+        {
+          '--bg-first': this.firstColorCode,
+          '--bg-second': this.fourthColorCode
+        }],
+        [{
           '--bg-first': this.secondColorCode,
           '--bg-second': "#FFFFFF"
         },
         {
           '--bg-first': this.secondColorCode,
           '--bg-second': "#000000"
-        }
+        },
+        {
+          '--bg-first': this.secondColorCode,
+          '--bg-second': this.firstColorCode
+        },
+        {
+          '--bg-first': this.secondColorCode,
+          '--bg-second': this.thirdColorCode
+        },  
+        {
+          '--bg-first': this.secondColorCode,
+          '--bg-second': this.fourthColorCode
+        }],
+        [{
+          '--bg-first': this.thirdColorCode,
+          '--bg-second': "#FFFFFF"
+        },
+        {
+          '--bg-first': this.thirdColorCode,
+          '--bg-second': "#000000"
+        },
+        {
+          '--bg-first': this.thirdColorCode,
+          '--bg-second': this.firstColorCode
+        },  
+        {
+          '--bg-first': this.thirdColorCode,
+          '--bg-second': this.secondColorCode
+        },
+        {
+          '--bg-first': this.thirdColorCode,
+          '--bg-second': this.fourthColorCode
+        }],
+        [{
+          '--bg-first': this.fourthColorCode,
+          '--bg-second': "#FFFFFF"
+        },
+        {
+          '--bg-first': this.fourthColorCode,
+          '--bg-second': "#000000"
+        },
+        {
+          '--bg-first': this.fourthColorCode,
+          '--bg-second': this.firstColorCode
+        },
+        {
+          '--bg-first': this.fourthColorCode,
+          '--bg-second': this.secondColorCode
+        },
+        {
+          '--bg-first': this.fourthColorCode,
+          '--bg-second': this.thirdColorCode
+        }],  
       ]
     }
   }
@@ -121,6 +165,7 @@ export default {
   width: var(--width);
   height: var(--height);
   border-radius: 50%;
+  background-clip:content-box;
 }
 .select-color {
   --bg: #FFFFFF;

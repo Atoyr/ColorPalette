@@ -24,10 +24,6 @@
          type="range" value="1" min="0" max="1" step="0.01" v-model="valueBrightness"></input>
       <p class="slider-text">{{vvalueBrightness}}</p>
     </div>
-    <div>
-      <p>HSV : {{hue}} {{saturation}} {{valueBrightness}}</p>
-      <p>RGB : {{myColor[0]}} {{myColor[1]}} {{myColor[2]}}</p>
-    </div>
     <ColorView :firstColor="myColor" :secondColor="[255,255,255]"></ColorView>
   </div>
 </template>
