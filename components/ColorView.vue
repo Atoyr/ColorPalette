@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="flex-row select-color-view py-1">
-      <div v-for="cc in colorCodes" class="flex-column select-color" :style="{'--bg': cc}">
+      <div v-for="(cc, i) in colorCodes" class="flex-column select-color" :style="colorStyle(i+1,cc)" @click="onClick(i + 1,cc)">
         <p>{{cc}}</p>
       </div>
     </div>
@@ -36,6 +36,10 @@ export default {
       type:Array,
       'default': () => [0,0,0]
     },
+    selectColorIndex: {
+      type:Number,
+      'default': () => 1
+    }
   },
   computed: {
     colors() {
@@ -150,6 +154,26 @@ export default {
         }],  
       ]
     }
+  },
+  methods: {
+    colorStyle(index,colorCode) {
+      if (index === this.selectColorIndex) {
+        return { 
+          '--bg': colorCode,
+          '--bg-clip': 'content-box',
+          '--border-width': '1px'
+        }
+      }else {
+        return { 
+          '--bg': colorCode,
+          '--bg-clip': 'border-box',
+          '--border-width': '0px'
+        }
+      }
+    },
+    onClick: function(index) {
+      this.selectColorIndex = index;
+    }
   }
 }
 </script>
@@ -169,9 +193,18 @@ export default {
 }
 .select-color {
   --bg: #FFFFFF;
+  --padding: 0.5rem;
+  --bg-clip: border-box;
+  --border-width: 0px;
   background-color: var(--bg);
+  background-clip: var(--bg-clip); 
   width: 5rem;
   height: 8rem;
+  border: {
+    width: var(--border-width);
+    style: solid;
+  }
+  padding: var(--padding);
   display: flex;
   justify-content: center;
   align-items: center;
