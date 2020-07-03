@@ -2,12 +2,25 @@ export const state = () => ({
   hue: 0,
   saturation: 0.8,
   valueBrightness: 0.8,
-  selectColorNo: 1,
+  selectColorIndex: 1,
+  firstColorHSV: [0,0.8,0.8],
+  secondColorHSV: [0,0.8,0.8],
+  thirdColorHSV: [0,0.8,0.8],
+  fourthColorHSV: [0,0.8,0.8],
 })
 
 export const mutations = {
   updateHue(state, hue) {
-    state.hue = hue % 360
+    switch(state.selectColorIndex) {
+      case 1:
+        state.firstColorHSV[0] = hue % 360;
+      case 2:
+        state.secondColorHSV[0] = hue % 360;
+      case 3:
+        state.thirdColorHSV[0] = hue % 360;
+      case 4:
+        state.fourthColorHSV[0] = hue % 360;
+    }
   },
   updateSaturation(state, saturation) {
     let s = saturation;
@@ -16,7 +29,16 @@ export const mutations = {
     }else if ( 1 < s) {
       s = 1;
     }
-    state.saturation = s;
+    switch(state.selectColorIndex) {
+      case 1:
+        state.firstColorHSV[1] = s;
+      case 2:
+        state.secondColorHSV[1] = s;
+      case 3:
+        state.thirdColorHSV[1] = s;
+      case 4:
+        state.fourthColorHSV[1] = s;
+    }
   },
   updateValueBrightness(state, valueBrightness) {
     let v = valueBrightness;

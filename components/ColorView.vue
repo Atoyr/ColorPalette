@@ -6,7 +6,7 @@
       </div>
     </div>
     <ColorBrightness v-for="c in colors" class="py-1" :color="c"></ColorBrightness>
-    <div class="flex-row py-1" v-for="cs in circleStyles">
+    <div class="flex-row " v-for="cs in circleStyles">
       <div v-for="c in cs" class="circle px-1 py-1" :style="c"></div>
     </div>
   </div>
@@ -36,9 +36,13 @@ export default {
       type:Array,
       'default': () => [0,0,0]
     },
-    selectColorIndex: {
-      type:Number,
-      'default': () => 1
+  },
+  data() {
+    return{
+        selectColorIndex: {
+        type:Number,
+        'default': 1
+      }
     }
   },
   computed: {
