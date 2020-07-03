@@ -24,7 +24,7 @@
          type="range" value="1" min="0" max="1" step="0.01" v-model="valueBrightness"></input>
       <p class="slider-text">{{vvalueBrightness}}</p>
     </div>
-    <ColorView :firstColor="myColor" :secondColor="[255,255,255]"></ColorView>
+    <ColorView :firstColor="myColor" :secondColor="[0,255,0]" :thirdColor="[0,0,255]" :fourthColor="[255,255,255]"></ColorView>
   </div>
 </template>
 

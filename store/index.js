@@ -2,6 +2,7 @@ export const state = () => ({
   hue: 0,
   saturation: 0.8,
   valueBrightness: 0.8,
+  selectColorNo: 1,
 })
 
 export const mutations = {
