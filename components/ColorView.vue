@@ -3,6 +3,7 @@
     <div class="flex-row select-color-view py-1">
       <div v-for="(cc, i) in colorCodes" class="flex-column select-color" :style="colorStyle(i+1,cc)" @click="onClick(i + 1,cc)">
         <p>{{cc}}</p>
+        <p>{{cc}}</p>
       </div>
     </div>
     <ColorBrightness v-for="c in colors" class="py-1" :color="c"></ColorBrightness>
@@ -39,10 +40,7 @@ export default {
   },
   data() {
     return{
-        selectColorIndex: {
-        type:Number,
-        'default': 1
-      }
+        selectColorIndex: 1
     }
   },
   computed: {
@@ -164,14 +162,12 @@ export default {
       if (index === this.selectColorIndex) {
         return { 
           '--bg': colorCode,
-          '--bg-clip': 'content-box',
-          '--border-width': '1px'
+          '--width': '8rem'
         }
       }else {
         return { 
           '--bg': colorCode,
-          '--bg-clip': 'border-box',
-          '--border-width': '0px'
+          '--width': '4rem'
         }
       }
     },
@@ -197,20 +193,18 @@ export default {
 }
 .select-color {
   --bg: #FFFFFF;
-  --padding: 0.5rem;
   --bg-clip: border-box;
-  --border-width: 0px;
+  --width: 5rem;
   background-color: var(--bg);
   background-clip: var(--bg-clip); 
-  width: 5rem;
+  width: var(--width);
   height: 8rem;
-  border: {
-    width: var(--border-width);
-    style: solid;
-  }
-  padding: var(--padding);
+  box-shadow: var(--box-shadow);
   display: flex;
   justify-content: center;
   align-items: center;
+  font:{
+    size: 0.65rem;
+  }
 }
 </style>
