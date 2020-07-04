@@ -37,13 +37,20 @@ export default {
       type:Array,
       'default': () => [0,0,0]
     },
-  },
-  data() {
-    return{
-        selectColorIndex: 1
+    index: {
+      type:Number,
+      'default': 1
     }
   },
   computed: {
+    selectColorIndex: {
+      get() {
+        return this.index;
+      },
+      set(value) {
+        this.$emit('updateIndex',value)
+      }
+    },
     colors() {
       return [
         this.firstColor,

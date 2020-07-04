@@ -24,7 +24,7 @@
          type="range" value="1" min="0" max="1" step="0.01" v-model="valueBrightness"></input>
       <p class="slider-text">{{vvalueBrightness}}</p>
     </div>
-    <ColorView :firstColor="myColor" :secondColor="[0,255,0]" :thirdColor="[0,0,255]" :fourthColor="[255,255,255]"></ColorView>
+    <ColorView @updateIndex="updateIndex" :index="selectColorIndex" :firstColor="firstColor" :secondColor="secondColor" :thirdColor="thirdColor" :fourthColor="fourthColor"></ColorView>
   </div>
 </template>
 
@@ -43,39 +43,54 @@ export default {
     },
     hue: {
       get() {
-        return this.$store.state.hue;
+        return this.$store.getters.hue;
       },
       set(value) {
         this.$store.dispatch('applyHue', value);
-        this.$refs.colorCircle.draw();
       }
     },
     saturation: {
       get() {
-        return this.$store.state.saturation;
+        return this.$store.getters.saturation;
       },
       set(value) {
         this.$store.dispatch('applySaturation', value);
-        this.$refs.colorCircle.draw();
       }
     },
     valueBrightness: {
       get() {
-        return this.$store.state.valueBrightness;
+        return this.$store.getters.valueBrightness;
       },
       set(value) {
         this.$store.dispatch('applyValueBrightness', value);
-        this.$refs.colorCircle.draw();
       }
     },
-    myColor: {
+    selectColorIndex: {
       get() {
-        return this.$hsv2rgb([this.hue,this.saturation,this.valueBrightness]);
+        return this.$store.state.selectColorIndex;
+      },
+      set(value) {
+        this.$store.dispatch('applySelectColorIndex',value);
       }
     },
-    myColorCode: {
+    firstColor: {
       get() {
-        return this.$toColorCode(this.myColor);
+        return this.$hsv2rgb(this.$store.state.firstColorHSV);
+      }
+    },
+    secondColor: {
+      get() {
+        return this.$hsv2rgb(this.$store.state.secondColorHSV);
+      }
+    },
+    thirdColor: {
+      get() {
+        return this.$hsv2rgb(this.$store.state.thirdColorHSV);
+      }
+    },
+    fourthColor: {
+      get() {
+        return this.$hsv2rgb(this.$store.state.fourthColorHSV);
       }
     },
     vsaturation: function(){
@@ -84,14 +99,14 @@ export default {
     vvalueBrightness : function(){
       return parseInt(this.valueBrightness * 100)
     },
-    myColorStyle() {
-      return {
-        '--bg': this.myColorCode
-      }
-    },
   },
   data() {
     return{
+    }
+  },
+  methods: {
+    updateIndex(index) {
+      this.selectColorIndex = index;
     }
   }
 }

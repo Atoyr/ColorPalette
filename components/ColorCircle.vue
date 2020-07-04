@@ -11,6 +11,8 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
+
 const basesize = 320
 
 function atan2rad(atan) {
@@ -53,32 +55,13 @@ export default {
     },
   },
   computed: {
+    ...mapGetters([
+      'hue',
+      'saturation',
+      'valueBrightness'
+    ]),
     size: function() {
       return this.mag * basesize;
-    },
-    hue: {
-      get() {
-        return this.$store.state.hue;
-      },
-      set(value) {
-        this.$store.dispatch('applyHue', value);
-      }
-    },
-    saturation: {
-      get() {
-        return this.$store.state.saturation;
-      },
-      set(value) {
-        this.$store.dispatch('applySaturation', value);
-      }
-    },
-    valueBrightness: {
-      get() {
-        return this.$store.state.valueBrightness;
-      },
-      set(value) {
-        this.$store.dispatch('applyValueBrightness', value);
-      }
     },
   },
   data() {
@@ -88,6 +71,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions([
+      'applyHue'
+      ]),
     drawCircle: function() {
       this.ctx.beginPath();
       this.ctx.clearRect(0, 0, this.size, this.size);
@@ -184,7 +170,7 @@ export default {
     draw: function() {
       this.drawCircle();
       let angle = this.hue;
-      this.updateHue(rad2canvas(angle/180 * Math.PI));
+      // this.updateHue(rad2canvas(angle/180 * Math.PI));
       this.drawSelectColorCircle(rad2canvas(angle/180 * Math.PI));
     },
     onClick: function(e) {
@@ -197,9 +183,9 @@ export default {
     },
     // rad is radian
     updateHue: function(rad) {
-      let canvasrad = rad2canvas(rad);
+      let canvasrad = rad2canvas(rad);;
       let angle = parseInt(canvasrad * 180 / Math.PI);
-      this.hue = angle;
+      this.applyHue(angle)
     },
   },
   mounted() {
@@ -207,6 +193,13 @@ export default {
     this.drawCircle();
     this.updateHue(0);
     this.drawSelectColorCircle(0);
+    this.$store.subscribeAction({
+      after: (action, state) => {
+        if (action.type === 'applyHue' || action.type === 'applySaturation' || action.type === 'applyValueBrightness' || action.type === 'applySelectColorIndex') {
+          this.draw()
+        }
+      }
+    })
   }
 }
 </script>
