@@ -24,6 +24,7 @@
          type="range" value="1" min="0" max="1" step="0.01" v-model="valueBrightness"></input>
       <p class="slider-text">{{vvalueBrightness}}</p>
     </div>
+    <ColorSelector @updateIndex="updateIndex" :index="selectColorIndex" :firstColor="firstColor" :secondColor="secondColor" :thirdColor="thirdColor" :fourthColor="fourthColor"></ColorSelector>
     <ColorView @updateIndex="updateIndex" :index="selectColorIndex" :firstColor="firstColor" :secondColor="secondColor" :thirdColor="thirdColor" :fourthColor="fourthColor"></ColorView>
   </div>
 </template>
@@ -31,10 +32,12 @@
 <script>
 import ColorCircle from '@/components/ColorCircle.vue'
 import ColorView from '@/components/ColorView.vue'
+import ColorSelector from '@/components/ColorSelector.vue'
 
 export default {
   components : {
     ColorCircle,
+    ColorSelector,
     ColorView
   },
   computed: {

@@ -1,11 +1,5 @@
 <template>
   <div>
-    <div class="flex-row select-color-view py-1">
-      <div v-for="(cc, i) in colorCodes" class="flex-column select-color" :style="colorStyle(i+1,cc)" @click="onClick(i + 1,cc)">
-        <p>{{cc}}</p>
-        <p>{{cc}}</p>
-      </div>
-    </div>
     <ColorBrightness v-for="c in colors" class="py-1" :color="c"></ColorBrightness>
     <div class="flex-row " v-for="cs in circleStyles">
       <div v-for="c in cs" class="circle px-1 py-1" :style="c"></div>
