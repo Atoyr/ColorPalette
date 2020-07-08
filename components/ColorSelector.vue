@@ -1,6 +1,6 @@
 <template>
-  <div class="flex-row select-color-view py-1">
-    <div v-for="(cc, i) in colorCodes" class="flex-column select-color" :style="colorStyle(i+1,cc)" @click="onClick(i + 1,cc)">
+  <div class="color-selector">
+    <div class="color-selector__item"  v-for="(cc, i) in colorCodes" :style="colorStyle(i+1,cc)" @click="onClick(i + 1,cc)">
       <p>{{cc}}</p>
       <p>{{cc}}</p>
     </div>
@@ -89,6 +89,5 @@ export default {
     }
   }
 }
-
 </script>
 

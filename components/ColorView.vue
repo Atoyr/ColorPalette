@@ -192,20 +192,4 @@ export default {
   border-radius: 50%;
   background-clip:content-box;
 }
-.select-color {
-  --bg: #FFFFFF;
-  --bg-clip: border-box;
-  --width: 5rem;
-  background-color: var(--bg);
-  background-clip: var(--bg-clip); 
-  width: var(--width);
-  height: 8rem;
-  box-shadow: var(--box-shadow);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font:{
-    size: 0.65rem;
-  }
-}
 </style>
