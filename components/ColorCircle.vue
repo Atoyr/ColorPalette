@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 
 const basesize = 320
 
@@ -49,6 +49,10 @@ export default {
       type: Number,
       default: 2
     },
+    colorSchemeHelper: {
+      type: String,
+      default: "none"
+    },
     division: {
       type: Number,
       default: 12
@@ -59,6 +63,12 @@ export default {
       'hue',
       'saturation',
       'valueBrightness'
+    ]),
+    ...mapState([
+      'firstColorHSV',
+      'secondColorHSV',
+      'thirdColorHSV',
+      'fourthColorHSV'
     ]),
     size: function() {
       return this.mag * basesize;
@@ -157,7 +167,7 @@ export default {
       let outring = this.halfsize;
       rad = rad2canvas(rad)
       this.ctx.beginPath();
-      this.ctx.strokeStyle = 'rgb(255,255,255)'
+      this.ctx.strokeStyle = 'rgb(17,17,17)'
       this.ctx.lineWidth = this.selectLineWidth
       this.ctx.arc(
         this.halfsize + Math.cos(rad) * (outring - this.lineWidth / 2 - this.borderWidth)
@@ -167,11 +177,27 @@ export default {
         ,2 * Math.PI)
       this.ctx.stroke()
     },
+    drawSchemeHelper: function() {
+      let rad = canvas2rad(this.hue / 180 * Math.PI);
+      switch(this.colorSchemeHelper) {
+        case "Similar" : 
+          let temprad = rad + Math.PI;
+          this.ctx.beginPath();
+          this.ctx.strokeStyle = 'rgb(17,17,17)';
+          this.ctx.lineWidth = this.selectLineWidth;
+          this.ctx.moveTo(this.halfsize + (this.halfsize - this.lineWidth) * Math.sin(rad),this.halfsize + (this.halfsize - this.lineWidth) * - - Math.cos(rad));
+          this.ctx.lineTo(this.halfsize + (this.halfsize - this.lineWidth) * - Math.sin(rad),this.halfsize - (this.halfsize - this.lineWidth) * - Math.cos(rad))
+          this.ctx.stroke();
+          break;
+
+      }
+    },
     draw: function() {
       this.drawCircle();
       let angle = this.hue;
       // this.updateHue(rad2canvas(angle/180 * Math.PI));
       this.drawSelectColorCircle(rad2canvas(angle/180 * Math.PI));
+      this.drawSchemeHelper();
     },
     onClick: function(e) {
       let rect = e.target.getBoundingClientRect();
