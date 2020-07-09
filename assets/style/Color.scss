@@ -59,3 +59,19 @@
     bottom: 0.1rem;
   }
 }
+
+.color-box {
+  --colorbox-background: #FFFFFF;
+  --colorbox-bordercolor: #000000;
+  background-color: var(--colorbox-background);
+  border: {
+    style: solid;
+    color: var(--colorbox-borderColor);
+    width: 0.3rem;
+  }
+  width: 1.25rem;
+  height: 1.25rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

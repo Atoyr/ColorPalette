@@ -18,31 +18,10 @@ export default {
   computed: {
     styleValiables() {
       return {
-        '--colorbox-size': '1.25rem',
-        '--colorbox-border': '0.3rem',
-        '--colorbox-background': `#${this.$toPaddedHexString(this.color[0],2)}${this.$toPaddedHexString(this.color[1],2)}${this.$toPaddedHexString(this.color[2],2)}`,
-        '--colorbox-borderColor': `#${this.$toPaddedHexString(this.borderColor[0],2)}${this.$toPaddedHexString(this.borderColor[1],2)}${this.$toPaddedHexString(this.borderColor[2],2)}`
+        '--colorbox-background': this.$toColorCode(this.color),
+        '--colorbox-borderColor': this.$toColorCode(this.borderColor)
       }
     }
   }
 }
 </script>
-<style lang="scss">
-.color-box {
-  --colorbox-size: 30px;
-  --colorbox-border: 7px;
-  --colorbox-background: #FFFFFF;
-  --colorbox-bordercolor: #000000;
-  background-color: var(--colorbox-background);
-  border: {
-    style: solid;
-    color: var(--colorbox-borderColor);
-    width: var(--colorbox-border);
-  }
-  width: var(--colorbox-size);
-  height: var(--colorbox-size);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-</style>

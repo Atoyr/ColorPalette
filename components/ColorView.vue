@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ColorBrightness class="color-brightness" v-for="c in colors"  :color="c"></ColorBrightness>
+    <ColorBrightness class="color-brightness" v-for="c in colors" :color="c"></ColorBrightness>
     <div class="flex-row " v-for="cs in circleStyles">
       <div v-for="c in cs" class="circle px-1 py-1" :style="c"></div>
     </div>
@@ -158,24 +158,6 @@ export default {
       ]
     }
   },
-  methods: {
-    colorStyle(index,colorCode) {
-      if (index === this.selectColorIndex) {
-        return { 
-          '--bg': colorCode,
-          '--width': '8rem'
-        }
-      }else {
-        return { 
-          '--bg': colorCode,
-          '--width': '4rem'
-        }
-      }
-    },
-    onClick: function(index) {
-      this.selectColorIndex = index;
-    }
-  }
 }
 </script>
 
