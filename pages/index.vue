@@ -2,8 +2,21 @@
   <div class="main">
     <ColorCircle class="color-circle" ref="colorCircle"></ColorCircle>
     <HSVSlider></HSVSlider>
-    <ColorSelector @updateIndex="updateIndex" :index="selectColorIndex" :firstColor="firstColor" :secondColor="secondColor" :thirdColor="thirdColor" :fourthColor="fourthColor"></ColorSelector>
-    <ColorView @updateIndex="updateIndex" :index="selectColorIndex" :firstColor="firstColor" :secondColor="secondColor" :thirdColor="thirdColor" :fourthColor="fourthColor"></ColorView>
+    <ColorSelector 
+      @updateIndex="updateIndex" 
+      :index="selectColorIndex" 
+      :firstColor="firstColor" 
+      :secondColor="secondColor" 
+      :thirdColor="thirdColor" 
+      :fourthColor="fourthColor">
+    </ColorSelector>
+    <ColorView 
+      :index="selectColorIndex" 
+      :firstColor="firstColor" 
+      :secondColor="secondColor" 
+      :thirdColor="thirdColor" 
+      :fourthColor="fourthColor">
+    </ColorView>
   </div>
 </template>
 
@@ -61,12 +74,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
-.slider {
-  width: 200px;
-}
-.slider-text {
-  width: 32px;
-}
-</style>
