@@ -65,6 +65,7 @@ export default {
       'valueBrightness'
     ]),
     ...mapState([
+      'selectColorIndex',
       'firstColorHSV',
       'secondColorHSV',
       'thirdColorHSV',
@@ -163,19 +164,44 @@ export default {
       }
     },
     // rad is radian
-    drawSelectColorCircle: function(rad) {
-      let outring = this.halfsize;
-      rad = rad2canvas(rad)
-      this.ctx.beginPath();
-      this.ctx.strokeStyle = 'rgb(17,17,17)'
-      this.ctx.lineWidth = this.selectLineWidth
-      this.ctx.arc(
-        this.halfsize + Math.cos(rad) * (outring - this.lineWidth / 2 - this.borderWidth)
-        ,this.halfsize + Math.sin(rad) * (outring - this.lineWidth / 2 - this.borderWidth)
-        ,this.lineWidth /2 - this.selectLineWidth
-        ,0
-        ,2 * Math.PI)
-      this.ctx.stroke()
+    drawSelectColorCircle: function(angle) {
+      for (let i = 1; i < 5; i++) {
+        this.ctx.beginPath();
+        let angle = 0;
+        let rad = 0;
+        let size = this.lineWidth /2 - this.selectLineWidth;
+        this.ctx.strokeStyle = 'rgb(238,238,238)';
+        this.ctx.lineWidth = this.selectLineWidth;
+
+        switch(i) {
+          case 1: 
+            angle = this.firstColorHSV[0];
+            break;
+          case 2: 
+            angle = this.secondColorHSV[0];
+            break;
+          case 3: 
+            angle = this.thirdColorHSV[0];
+            break;
+          case 4: 
+            angle = this.fourthColorHSV[0];
+            break;
+        }
+        rad = angle / 180 * Math.PI;
+        if (i === this.selectColorIndex) {
+          this.ctx.strokeStyle = 'rgb(17,17,17)';
+        }
+        let x = this.halfsize + Math.cos(rad) * (this.halfsize - this.lineWidth / 2 - this.borderWidth);
+        let y = this.halfsize + Math.sin(rad) * (this.halfsize - this.lineWidth / 2 - this.borderWidth);
+        this.ctx.arc(
+           x
+          ,y
+          ,size
+          ,0
+          ,2 * Math.PI)
+        this.ctx.stroke()
+      }
+      
     },
     drawSchemeHelper: function() {
       let rad = canvas2rad(this.hue / 180 * Math.PI);
@@ -195,8 +221,7 @@ export default {
     draw: function() {
       this.drawCircle();
       let angle = this.hue;
-      // this.updateHue(rad2canvas(angle/180 * Math.PI));
-      this.drawSelectColorCircle(rad2canvas(angle/180 * Math.PI));
+      this.drawSelectColorCircle(angle);
       this.drawSchemeHelper();
     },
     onClick: function(e) {
